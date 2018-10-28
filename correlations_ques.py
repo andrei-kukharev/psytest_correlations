@@ -4,25 +4,6 @@
 """
 27/10/2018
 
-Переписанный скрипт correlations.py
-
-Нужно оптимизировать (переписать) скрипт correlations_one.py 
-coeff - распределение выборов ответов относительно каждого вопроса (т.е. внутри вопроса), 
-abs_coeff - распределение выбора рез-татов относительно двух вопросов, 
-abs_test_coeff - распределение выборов ответов относительно всего теста 
-умноженное на 1000 000.  Задавались мин и макс значения для каждого коэф: от 0 до 1.
-
-
-Example:
-from correlations31 import *
-result = correlation_calculation(tests=[11], min_number_results=5)
-df = result['df_matrix_corr']
-------------
-
-engine = create_engine("mysql+mysqldb://root:"+'NEW PASSWORD'+"@localhost/parrot_db")
-----
-
-Без записи в БД:
 python3 correlations_p12.py -one -nwbd -t 1
 
    answer_id_1  answer_id_2   abs_coeff  abs_test_coeff
@@ -37,12 +18,9 @@ python3 correlations_p12.py -one -nwbd -t 1
 8            1            9 0.000000000     0.000000000
 9            1           10 0.000000000     0.000000000
 
-Для удаления таблицы нужно делать TRUNCATE TABLE test_qa_correlation;
-потому что с помощью DELETE большую таблицу не получится удалить!
-
 """
 
-from __future__ import division  # need for python2
+from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
@@ -65,20 +43,12 @@ sys.path.append('..')
 from database import database_connect
 from utils.timer import timer
 
-#from normality_load_from_csv import *  # for load data from csv files
-
 logging.basicConfig(level=logging.DEBUG)
-#logging.basicConfig(level=logging.INFO)
 
 NAN = -1 # it works as nan for answer_id  (but it's not np.nan!!!)
-
 DEBUG = False
 NO_WRITING_DB = False # if true, then don't save data to DB
-
 MULT_abs_test_coeff = 10*1000 # multiplier for abs_test_coeff
-
-#-----------------------
-
 
 # ---------------------------
 
@@ -139,7 +109,6 @@ def save_dataframe_to_db(df, table_name):
 	from sqlalchemy.orm.session import sessionmaker	
 
 	#sudo apt install python3-mysqldb
-
 	#str_connect = 'mysql+mysqlconnector://{0}:{1}@{2}/{3}'\
 	#	.format(CONFIG['user'], CONFIG['password'], CONFIG['host'], CONFIG['database'])
 
